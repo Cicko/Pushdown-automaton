@@ -15,4 +15,5 @@ public:
   void push (char symbols);
   char pop ();
   unsigned getSize();
+  void show ();
 };
