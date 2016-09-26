@@ -1,26 +1,16 @@
 #include "Stack.hpp"
+#include "InTape.hpp"
 #include <iostream>
 #include <vector>
 
 using namespace std;
 
 int main () {
-	vector<char> symbols;
-	symbols.push_back('a');
-	symbols.push_back('b');
-	symbols.push_back('c');
+	InTape * myTape = new InTape();
 
-	Stack stack(symbols);
 
-	stack.push('a');
-	stack.push('b');
-  	stack.push('b');
-	stack.push('d');
+	myTape->loadFromKeyboard();
 
-	stack.show();
-
-	stack.pop();
-
-	stack.show();
+	myTape->show();
 
 }

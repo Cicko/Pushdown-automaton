@@ -1,4 +1,4 @@
-#include "InTape.h"
+#include "InTape.hpp"
 #include <fstream>
 #include <iostream>
 
@@ -8,25 +8,25 @@ using namespace std;
 InTape::InTape () {}
 
 InTape::InTape (string fileName) {
-  load(fileName);
+  loadFromFile (fileName);
 }
 
 
 InTape::~InTape (){
-   clear();
+   chars_.clear();
 }
 
 void InTape::loadFromFile (string fileName) {
   inx_ = 0;
   fstream file;
-  int aChar;
+  string symbol;
   fileName_ = fileName;
   file.open(fileName.c_str(), ios::in);
 
   if(file.is_open()) {
       chars_.clear();
-    while(file >> aChar){
-      chars_.push_back(aChar);
+      while(file >> symbol){
+        chars_.push_back(symbol);
     }
     file.close();
   }
@@ -62,11 +62,6 @@ bool InTape::hasNext ()
 }
 
 
-void InTape::reset (string fileName)
-{
-  load(fileName);
-}
-
 // return to the first position
 void InTape::reset () {
   inx_ = 0;
@@ -75,8 +70,10 @@ void InTape::reset () {
 // Show the content of the input tape.
 void InTape::show () {
   cout << "INPUT TAPE: [";
-  for (int i = 0;i < chars_.size; i++) {
-    cout << chars_[i] << ", ";
+  for (int i = 0;i < chars_.size(); i++) {
+    cout << chars_[i];
+    if (i < chars_.size() - 1)
+      cout << ", ";
   }
   cout << "]" << endl;
 }

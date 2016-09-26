@@ -22,10 +22,10 @@ class InTape {
   vector<string> chars_; // Characters of the input tape.
 public:
   InTape ();
-  InTape (string);
+  InTape (string fileName);
   ~InTape ();
-  void load (string);
-  void reset (string);
+  void loadFromFile (string fileName);
+  void loadFromKeyboard ();
   void reset ();
   string read ();
   bool hasNext ();
