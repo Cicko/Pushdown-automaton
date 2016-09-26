@@ -2,6 +2,7 @@
 
 
 PushDownAutomaton::PushDownAutomaton (string fileName) {
+  inputTape_ = new InTape();
   loadInput(fileName);
 }
 
@@ -10,7 +11,6 @@ PushDownAutomaton::PushDownAutomaton (string fileName) {
 void PushDownAutomaton::loadInput (string fileName) {
   ifstream file;
   string fileData = "";
-  fileName_ = fileName;
   file.open (fileName.c_str());
   if (file.is_open()) {
     while (!file.eof()) {
@@ -23,5 +23,7 @@ void PushDownAutomaton::loadInput (string fileName) {
   else {
     cerr << "El fichero no existe" << endl;
   }
-  return fileData;
+
 }
+
+void PushDownAutomaton::loadAutomaton

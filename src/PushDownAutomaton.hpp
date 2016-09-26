@@ -2,15 +2,16 @@
 #include <fstream>
 #include <string>
 #include "Stack.hpp"
-#include "ITape.hpp"
+#include "InTape.hpp"
 
 
 using namespace std;
 
 class PushDownAutomaton{
-	Stack stack;
-	ITape inputTape;
-	unsigned actualState;
+	Stack* stack_;
+	InTape* inputTape_;
+	unsigned actualState_;
+	vector<string> transitions_;
 
 public:
 	PushDownAutomaton(string fileName);
