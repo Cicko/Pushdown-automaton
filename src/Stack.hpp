@@ -8,21 +8,28 @@
 ***/
 
 #include <iostream>
-#include <cstring>
+#include <string>
 #include <vector>
 
 using namespace std;
 
 class Stack {
-  vector<char> symbols;  // Símbolos que acepta la pila.
-  vector<char> content; // Contenido de la pila.
+  vector<string> acceptedSymbols;  // Símbolos que acepta la pila.
+  vector<string> content; // Contenido de la pila.
+
+  string initialSymbol;
 
 public:
-  Stack (vector<char> aSymbols);
+  Stack (vector<string> aSymbols);
   ~Stack ();
 
-  void push (char symbols);
-  char pop ();
-  unsigned getSize();
-  void show ();
+  void push (string symbol);
+  string pop ();
+  string getTop ();
+  const void show ();
+
+  // Getters
+  const unsigned getSize();
+  const string getInitialSymbol ();
+  const vector<string> getAcceptedSymbols ();
 };

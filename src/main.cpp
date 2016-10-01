@@ -1,16 +1,16 @@
-#include "Stack.hpp"
-#include "InTape.hpp"
+#include "PushDownAutomaton.hpp"
 #include <iostream>
 #include <vector>
 
 using namespace std;
 
-int main () {
-	InTape * myTape = new InTape();
+int main (int argc, char * argv[]) {
+	PushDownAutomaton * automaton = new PushDownAutomaton (argv[1]);
 
+	automaton->show();
 
-	myTape->loadFromKeyboard();
+	automaton->loadInputByKeyboard();
 
-	myTape->show();
+	automaton->checkInput(false);
 
 }
