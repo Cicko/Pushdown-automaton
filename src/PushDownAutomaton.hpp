@@ -9,6 +9,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <exception>
 #include <string>
 #include <utility> // pair class
 #include "Stack.hpp"
@@ -39,9 +40,10 @@ public:
 	void loadInput (string fileName);
 	void loadInputByKeyboard ();
 	void loadAutomaton (string fileName);
-	void nextStep (string actualState, InTape input, Stack stack, bool trace);
+	void nextStep (string actualState, InTape input, Stack stack, int readCount, bool trace);
 	void checkInput (bool trace);
-	vector<transition_t> getAllowedTransitionsForState (string state, InTape input, Stack stack);
+	vector<transition_t> getAllowedTransitionsForState (string state, InTape input, Stack stack, bool verbose);
+	bool isFinalState (string state);
 	void show ();
 
 private:

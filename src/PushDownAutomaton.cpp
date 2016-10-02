@@ -49,16 +49,81 @@ void PushDownAutomaton::loadAutomaton (string fileName) {
   }
 }
 
+void PushDownAutomaton::nextStep (string actualState, InTape input, Stack stack, int readCount, bool trace) {
+  try {
 
-void PushDownAutomaton::nextStep (string actualState, InTape input, Stack stack, bool trace) {
-  vector<transition_t> allowedTransitions = getAllowedTransitionsForState (actualState, input, stack);
-  cout << "Allowed Transitions: " << endl;
-  for (int i = 0; i < allowedTransitions.size(); i++) {
-    cout << allowedTransitions[i].first << " --> " << allowedTransitions[i].second << endl;
+    cout << endl << "Actual State: " << actualState << endl;
+    if (input.hasNext()) {
+      cout << "Actual input char: " << input.getActualChar() << endl;
+      stack.show();
+      cout << "Counter: " << ++readCount << endl;
+      vector<transition_t> allowedTransitions = getAllowedTransitionsForState (actualState, input, stack, false);
+
+      for (int i = 0;i < allowedTransitions.size(); i++) {
+        Stack tempStack = stack;
+        InTape tempInput = input;
+        string actual = allowedTransitions[i].first;
+        string next = allowedTransitions[i].second;
+
+        istringstream iss(actual);
+
+        string readInput;
+        iss >> readInput;  // Actual state
+        iss >> readInput;  // actual input to read
+        if (readInput != "e") {
+          readInput = tempInput.read();
+        }
+        else {
+          cout << " NO CONSUME INPUT" << endl;
+          readInput = "e";
+        }
+
+
+        istringstream iss2(next);
+        string nextState;
+        vector<string> nextStackSymbols;
+        iss2 >> nextState;
+
+        // it can push more than one symbol.
+        while (!iss2.eof()) {
+          string symbol;
+          iss2 >> symbol;
+          if (symbol != "" && symbol != "e")
+            nextStackSymbols.push_back(symbol);
+        }
+
+
+        cout << "Read input: " << readInput << endl;
+        cout << "Next State: " << nextState << endl;
+        cout << "Next Stack Symbols: {";
+        for (int i = 0; i < nextStackSymbols.size(); i++) {
+          cout << nextStackSymbols[i];
+          if (i < nextStackSymbols.size() - 1)
+            cout << ", ";
+          else
+            cout << "}" << endl;
+        }
+
+        tempStack.pop();
+        tempStack.push(nextStackSymbols);
+        nextStep (nextState, tempInput, tempStack, readCount, trace);
+      }
+    }
+    else  {
+      cout << "!!!!No more input.. and ";
+      if (isFinalState (actualState))
+        cout << "Input is accepted!!!!" << endl;
+      else
+        cout << "Input is NOT accepted." << endl;
+    }
+
+  }
+  catch (exception& e) {
+    cout << e.what() << '\n';
   }
 }
 
-vector<transition_t> PushDownAutomaton::getAllowedTransitionsForState (string actualState, InTape input, Stack stack) {
+vector<transition_t> PushDownAutomaton::getAllowedTransitionsForState (string actualState, InTape input, Stack stack, bool verbose) {
   string actual = actualState + " " + input.read() + " " + stack.getTop();
   string actualEmpty = actualState + " e " + stack.getTop();
 
@@ -66,12 +131,29 @@ vector<transition_t> PushDownAutomaton::getAllowedTransitionsForState (string ac
   for (int i = 0;i < transitions_.size(); i++)
     if (transitions_[i].first == actual || transitions_[i].first == actualEmpty)
       allowed.push_back(transitions_[i]);
+
+  if (verbose) {
+    cout << "Allowed Transitions: " << endl;
+    for (int i = 0; i < allowed.size(); i++) {
+      cout << allowed[i].first << " --> " << allowed[i].second << endl;
+    }
+  }
+
   return allowed;
 }
 
 
+bool PushDownAutomaton::isFinalState (string state) {
+  for (int i = 0 ;i < finalStates_.size(); i++) {
+    if (state == finalStates_[i])
+      return true;
+  }
+  return false;
+}
+
+
 void PushDownAutomaton::checkInput (bool trace) {
-  nextStep (actualState_, *inputTape_, *stack_, trace);
+  nextStep (actualState_, *inputTape_, *stack_, 0, trace);
 }
 
 
@@ -127,8 +209,13 @@ void PushDownAutomaton::saveTransition (string transition) {
     iss >> temp;    // next state
     next += temp;
     next += " ";
-    iss >> temp;    // next symbol to push to stack
-    next += temp;
+    while (!iss.eof()) {
+      iss >> temp;    // next symbol to push to stack
+      next += temp ;
+      next += " ";
+    }
+
+    cout << "Next symbols: " << next << endl;
 
     transition_t trans;
     trans.first = actual;

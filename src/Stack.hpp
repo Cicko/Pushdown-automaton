@@ -16,7 +16,7 @@ using namespace std;
 class Stack {
   vector<string> acceptedSymbols;  // Símbolos que acepta la pila.
   vector<string> content; // Contenido de la pila.
-
+  unsigned sz;
   string initialSymbol;
 
 public:
@@ -24,6 +24,7 @@ public:
   ~Stack ();
 
   void push (string symbol);
+  void push (vector<string> symbols);
   string pop ();
   string getTop ();
   const void show ();

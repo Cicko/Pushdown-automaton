@@ -4,6 +4,7 @@
 
 Stack::Stack (vector<string> aSymbols) {
 	acceptedSymbols = aSymbols;
+	sz = 0;
 }
 
 Stack::~Stack () { }
@@ -13,15 +14,23 @@ void Stack::push (string symbol) {
   if (find(acceptedSymbols.begin(), acceptedSymbols.end(), symbol) != acceptedSymbols.end()) {
 		if (getSize() == 0) initialSymbol = symbol;
 		content.push_back(symbol);
+		sz++;
 	}
 	else
 		cout << "The symbol " << symbol << " is not contained in the stack alphabet" << endl;
 }
 
+void Stack::push (vector<string> symbols) {
+	for (int i = 0; i < symbols.size(); i++) {
+		push(symbols[symbols.size() - 1 - i]);
+	}
+}
+
 string Stack::pop () {
-	if (content.size() > 0) {
+	if (sz > 0) {
 		string last = content.back();
 		content.pop_back();
+		sz--;
 		return last;
 	}
 	return "";
@@ -32,7 +41,7 @@ string Stack::getTop () {
 }
 
 const unsigned Stack::getSize () {
-  return content.size();
+  return sz;
 }
 
 const string Stack::getInitialSymbol () {

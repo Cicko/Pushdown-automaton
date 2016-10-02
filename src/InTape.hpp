@@ -28,6 +28,7 @@ public:
   void loadFromKeyboard ();
   void reset ();
   string read ();
+  string getActualChar () { return chars_[inx_]; };
   bool hasNext ();
   void show (); // Show the content of the input tape.
 };
