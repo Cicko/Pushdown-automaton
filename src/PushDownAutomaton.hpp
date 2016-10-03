@@ -10,6 +10,7 @@
 #include <fstream>
 #include <sstream>
 #include <exception>
+#include <iomanip>
 #include <string>
 #include <utility> // pair class
 #include "Stack.hpp"
@@ -31,6 +32,7 @@ class PushDownAutomaton {
 	Stack* stack_;
 	InTape* inputTape_;
 	string actualState_;
+	bool acceptedInput_;
 
 public:
 	PushDownAutomaton(string fileName);
@@ -41,7 +43,7 @@ public:
 	void loadInputByKeyboard ();
 	void loadAutomaton (string fileName);
 	void nextStep (string actualState, InTape input, Stack stack, int readCount, bool trace);
-	void checkInput (bool trace);
+	bool checkInput (bool trace);
 	vector<transition_t> getAllowedTransitionsForState (string state, InTape input, Stack stack, bool verbose);
 	bool isFinalState (string state);
 	void show ();
@@ -54,5 +56,6 @@ private:
 	void readInitialStackSymbol (string symbol);
 	void readFinalStates (string states);
 	void saveTransition (string transition);
-	vector<string> lineToStrings (string line);
+	vector<string> lineToStrings (string line, string delimiter);
+	void showAllowedTransitions (vector<transition_t> transitions);
 };

@@ -39,6 +39,7 @@ void InTape::loadFromKeyboard () {
   cout << "Put characters for the input tape. type 'exit' to finish." << endl;
   string actual;
   unsigned iterator = 0;
+
   do {
     cout << "Character " << iterator++ << ": ";
     cin >> actual;
@@ -48,16 +49,14 @@ void InTape::loadFromKeyboard () {
   } while (actual.compare("exit") != 0);
 }
 
-string InTape::read ()
-{
+string InTape::read () {
   if (inx_ < chars_.size())
       return chars_[inx_++];
   else
-      return 0;
+      return "";
 }
 
-bool InTape::hasNext ()
-{
+bool InTape::hasNext () {
   return inx_ < chars_.size();
 }
 
@@ -68,7 +67,7 @@ void InTape::reset () {
 }
 
 // Show the content of the input tape.
-void InTape::show () {
+const void InTape::show () {
   cout << "INPUT TAPE: [";
   for (int i = 0;i < chars_.size(); i++) {
     cout << chars_[i];
@@ -76,4 +75,12 @@ void InTape::show () {
       cout << ", ";
   }
   cout << "]" << endl;
+}
+
+
+const void InTape::showInline () {
+  for (int i = inx_; i < chars_.size(); i++) {
+    cout << chars_[i];
+  }
+  cout << "$";
 }

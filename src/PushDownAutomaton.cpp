@@ -50,77 +50,86 @@ void PushDownAutomaton::loadAutomaton (string fileName) {
 }
 
 void PushDownAutomaton::nextStep (string actualState, InTape input, Stack stack, int readCount, bool trace) {
-  try {
-
-    cout << endl << "Actual State: " << actualState << endl;
-    if (input.hasNext()) {
-      cout << "Actual input char: " << input.getActualChar() << endl;
-      stack.show();
-      cout << "Counter: " << ++readCount << endl;
-      vector<transition_t> allowedTransitions = getAllowedTransitionsForState (actualState, input, stack, false);
-
-      for (int i = 0;i < allowedTransitions.size(); i++) {
-        Stack tempStack = stack;
-        InTape tempInput = input;
-        string actual = allowedTransitions[i].first;
-        string next = allowedTransitions[i].second;
-
-        istringstream iss(actual);
-
-        string readInput;
-        iss >> readInput;  // Actual state
-        iss >> readInput;  // actual input to read
-        if (readInput != "e") {
-          readInput = tempInput.read();
+  bool allowedTransitionsVerbose = false;
+  if (!acceptedInput_) {
+    try {
+        if (!input.hasNext()) {
+          if (isFinalState(actualState)) {
+            acceptedInput_ = true;
+          }
         }
+
+        vector<transition_t> allowedTransitions = getAllowedTransitionsForState (actualState, input, stack, allowedTransitionsVerbose);
+
+        cout << setw(8) << actualState << setw(16);
+        input.showInline();
+        cout << setw(16);
+        stack.showInline();
+        cout << setw(16);
+        if (allowedTransitions.size() > 0)
+          showAllowedTransitions (allowedTransitions);
         else {
-          cout << " NO CONSUME INPUT" << endl;
-          readInput = "e";
+          cout << "         NO TRANSITIONS ALLOWED.." << endl;
+          cout << "=======================================================" << endl;
         }
 
 
-        istringstream iss2(next);
-        string nextState;
-        vector<string> nextStackSymbols;
-        iss2 >> nextState;
+        for (int i = 0; i < allowedTransitions.size(); i++) {
+          Stack tempStack = stack;
+          InTape tempInput = input;
+          string actual = allowedTransitions[i].first;
+          string next = allowedTransitions[i].second;
 
-        // it can push more than one symbol.
-        while (!iss2.eof()) {
-          string symbol;
-          iss2 >> symbol;
-          if (symbol != "" && symbol != "e")
-            nextStackSymbols.push_back(symbol);
+          istringstream iss(actual);
+
+          string readInput;
+          iss >> readInput;  // Actual state
+          iss >> readInput;  // actual input to read
+          if (readInput != "e") {
+            readInput = tempInput.read();
+          }
+          else {
+            readInput = "e";  // We don't consume the input
+          }
+
+          istringstream iss2(next);
+          string nextState;
+          vector<string> nextStackSymbols;
+          iss2 >> nextState;
+
+          // it can push more than one symbol.
+          while (!iss2.eof()) {
+            string symbol;
+            iss2 >> symbol;
+            if (symbol != "" && symbol != "e")
+              nextStackSymbols.push_back(symbol);
+          }
+
+          tempStack.pop();
+          tempStack.push(nextStackSymbols);
+          nextStep (nextState, tempInput, tempStack, readCount, trace);
         }
-
-
-        cout << "Read input: " << readInput << endl;
-        cout << "Next State: " << nextState << endl;
-        cout << "Next Stack Symbols: {";
-        for (int i = 0; i < nextStackSymbols.size(); i++) {
-          cout << nextStackSymbols[i];
-          if (i < nextStackSymbols.size() - 1)
-            cout << ", ";
-          else
-            cout << "}" << endl;
-        }
-
-        tempStack.pop();
-        tempStack.push(nextStackSymbols);
-        nextStep (nextState, tempInput, tempStack, readCount, trace);
-      }
     }
-    else  {
-      cout << "!!!!No more input.. and ";
-      if (isFinalState (actualState))
-        cout << "Input is accepted!!!!" << endl;
-      else
-        cout << "Input is NOT accepted." << endl;
+    catch (exception& e) {
+      cout << e.what() << '\n';
     }
+  }
+}
 
+void PushDownAutomaton::showAllowedTransitions (vector<transition_t> transitions) {
+  for (int i = 0; i < transitions.size(); i++) {
+    cout << transitions[i].second;
+    if (i < transitions.size() - 1)
+      cout << ", ";
   }
-  catch (exception& e) {
-    cout << e.what() << '\n';
-  }
+  cout << endl;
+}
+
+bool PushDownAutomaton::checkInput (bool trace) {
+  acceptedInput_ = false;
+  cout << "---- State ---- ---- Input ---- ---- Stack ---- ---- Actions ----" << endl;
+  nextStep (actualState_, *inputTape_, *stack_, 0, trace);
+  return acceptedInput_;
 }
 
 vector<transition_t> PushDownAutomaton::getAllowedTransitionsForState (string actualState, InTape input, Stack stack, bool verbose) {
@@ -152,25 +161,19 @@ bool PushDownAutomaton::isFinalState (string state) {
 }
 
 
-void PushDownAutomaton::checkInput (bool trace) {
-  nextStep (actualState_, *inputTape_, *stack_, 0, trace);
-}
-
-
-
 // Private methods
 
 void PushDownAutomaton::readStates (string states) {
-  states_ = lineToStrings (states);
+  states_ = lineToStrings (states, " ");
 }
 
 
 void PushDownAutomaton::readInputSymbols (string symbols) {
-  inputSymbols_ = lineToStrings (symbols);
+  inputSymbols_ = lineToStrings (symbols, " ");
 }
 
 void PushDownAutomaton::readStackSymbols (string symbols) {
-  stack_ = new Stack (lineToStrings (symbols));
+  stack_ = new Stack (lineToStrings (symbols, " "));
 }
 
 void PushDownAutomaton::readInitialState (string state) {
@@ -184,7 +187,7 @@ void PushDownAutomaton::readInitialStackSymbol (string symbol) {
 
 void PushDownAutomaton::readFinalStates (string states) {
   if (states != "")
-    finalStates_ = lineToStrings (states);
+    finalStates_ = lineToStrings (states, " ");
   else
     finalStates_.push_back("NO_FINAL");
 }
@@ -280,13 +283,13 @@ void PushDownAutomaton::show () {
   cout << endl;
 }
 
-vector<string> PushDownAutomaton::lineToStrings (string line) {
+vector<string> PushDownAutomaton::lineToStrings (string line, string delimiter) {
   vector<string> strings;
   char * pch;
-  pch = strtok ( (char*) line.c_str()," ");
+  pch = strtok ( (char*) line.c_str(),delimiter.c_str());
   while (pch != NULL) {
     strings.push_back(pch);
-    pch = strtok (NULL, " ");
+    pch = strtok (NULL, delimiter.c_str());
   }
   return strings;
 }

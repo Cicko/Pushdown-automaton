@@ -28,6 +28,7 @@ public:
   string pop ();
   string getTop ();
   const void show ();
+  const void showInline ();
 
   // Getters
   const unsigned getSize();

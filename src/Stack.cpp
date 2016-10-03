@@ -55,12 +55,18 @@ const vector<string> Stack::getAcceptedSymbols () {
 
 
 const void Stack::show () {
-        cout << endl << "TOP" << endl;
+	cout << endl << "TOP" << endl;
  	for (int i = 0; i < getSize(); i++)
 		if (i < getSize() - 1)
 	  		cout << "    | " << content.at(getSize() - i - 1) << " |" << endl;
 		else
 	                cout << "    |_" << content.at(getSize() - i - 1) << "_|" << endl;
 	cout  << endl;
+}
 
+
+const void Stack::showInline () {
+	for (int i = 0; i < getSize(); i++) {
+		cout << content.at(getSize() - i - 1);
+	}
 }

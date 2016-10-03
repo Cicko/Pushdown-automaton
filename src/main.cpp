@@ -5,12 +5,23 @@
 using namespace std;
 
 int main (int argc, char * argv[]) {
-	PushDownAutomaton * automaton = new PushDownAutomaton (argv[1]);
+	if (argc == 2) {
+		PushDownAutomaton * automaton = new PushDownAutomaton (argv[1]);
 
-	automaton->show();
+		automaton->show();
 
-	automaton->loadInputByKeyboard();
+		automaton->loadInputByKeyboard();
 
-	automaton->checkInput(false);
+		if (automaton->checkInput(false))
+		cout << endl << "Input is accepted" << endl;
+		else
+		cout << endl << "Input is NOT accepted" << endl;
+
+		return 0;
+	}
+	else {
+		cout << "Usage: ./PushDownAutomaton <automaton_file>" << endl;
+		return -1;
+	}
 
 }
