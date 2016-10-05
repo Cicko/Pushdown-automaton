@@ -49,6 +49,8 @@ void InTape::loadFromKeyboard () {
   } while (actual.compare("exit") != 0);
 }
 
+
+// Read input from tape so the head go forward
 string InTape::read () {
   if (inx_ < chars_.size())
       return chars_[inx_++];
@@ -56,6 +58,7 @@ string InTape::read () {
       return "";
 }
 
+// Return true if the head is not still at the end.
 bool InTape::hasNext () {
   return inx_ < chars_.size();
 }

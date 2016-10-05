@@ -25,8 +25,8 @@ class PushDownAutomaton {
 	vector<string> states_;
 	vector<string> inputSymbols_;
 	vector<string> finalStates_;
+	bool byFinalState;                     // the automaton finishes by final state or by emptying stack
 	vector<transition_t> transitions_;
-	//TransitionsHash* transitions_;
 	string initialState_;
 
 	Stack* stack_;

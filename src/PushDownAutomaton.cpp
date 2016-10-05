@@ -61,16 +61,16 @@ void PushDownAutomaton::nextStep (string actualState, InTape input, Stack stack,
 
         vector<transition_t> allowedTransitions = getAllowedTransitionsForState (actualState, input, stack, allowedTransitionsVerbose);
 
-        cout << setw(8) << actualState << setw(16);
+        cout << setw(8) << actualState << setw(14);
         input.showInline();
-        cout << setw(16);
+        cout << setw(14);
         stack.showInline();
-        cout << setw(16);
+        cout << setw(14);
         if (allowedTransitions.size() > 0)
           showAllowedTransitions (allowedTransitions);
         else {
           cout << "         NO TRANSITIONS ALLOWED.." << endl;
-          cout << "=======================================================" << endl;
+          cout << "==========================================================================" << endl;
         }
 
 
@@ -218,8 +218,6 @@ void PushDownAutomaton::saveTransition (string transition) {
       next += " ";
     }
 
-    cout << "Next symbols: " << next << endl;
-
     transition_t trans;
     trans.first = actual;
     trans.second = next;
@@ -283,10 +281,10 @@ void PushDownAutomaton::show () {
   cout << endl;
 }
 
+// This method divide by a delimiter a whole string into an array of strings.
 vector<string> PushDownAutomaton::lineToStrings (string line, string delimiter) {
   vector<string> strings;
-  char * pch;
-  pch = strtok ( (char*) line.c_str(),delimiter.c_str());
+  char * pch = strtok ( (char*) line.c_str(),delimiter.c_str());
   while (pch != NULL) {
     strings.push_back(pch);
     pch = strtok (NULL, delimiter.c_str());
