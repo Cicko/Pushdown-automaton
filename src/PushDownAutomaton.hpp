@@ -3,8 +3,8 @@
 * @email: alu0100824780@ull.edu.es / cickogames@gmail.com
 * @subject: Complejidad computacional at Universidad de La Laguna
 * @year: 2016
-* @description: Input tape class that will contain the characters to determine if the string
-*               pertain to a specific language.
+* @description: The Pushdown automaton class
+*
 ***/
 #ifndef _PUSH_DOWN_AUTOMATON_HPP_
 #define _PUSH_DOWN_AUTOMATON_HPP
@@ -24,11 +24,11 @@ using namespace std;
 
 typedef pair<string, string> transition_t;
 
+// Pushdown automaton that works by final state
 class PushDownAutomaton {
 	vector<string> states_;
 	vector<string> inputSymbols_;
 	vector<string> finalStates_;
-	bool byFinalState;                     // the automaton finishes by final state or by emptying stack
 	vector<transition_t> transitions_;
 	string initialState_;
 
