@@ -35,18 +35,12 @@ void InTape::loadFromFile (string fileName) {
   }
 }
 
+
 void InTape::loadFromKeyboard () {
-  cout << "Put characters for the input tape. type 'exit' to finish." << endl;
-  string actual;
-  unsigned iterator = 0;
-
-  do {
-    cout << "Character " << iterator++ << ": ";
-    cin >> actual;
-    if (actual.compare("exit") != 0)
-      chars_.push_back(actual);
-
-  } while (actual.compare("exit") != 0);
+  string input;
+  cout << "Put string as input: ";
+  cin >> input;
+  for_each (input.begin(), input.end(), [&] (char c) { chars_.push_back(utils::charToString(c)); });
 }
 
 

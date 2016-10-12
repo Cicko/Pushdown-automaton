@@ -6,7 +6,8 @@
 * @description: Stack class used for the Automaton to push and pop characters depending on the transition functions.
 *
 ***/
-
+#ifndef _STACK_HPP
+#define _STACK_HPP
 #include <iostream>
 #include <string>
 #include <vector>
@@ -27,11 +28,13 @@ public:
   void push (vector<string> symbols);
   string pop ();
   string getTop ();
-  const void show ();
-  const void showInline ();
+  const void show ();        // show content more beautiful.
+  const void showInline ();  // show content in the trace table.
 
   // Getters
   const unsigned getSize();
   const string getInitialSymbol ();
   const vector<string> getAcceptedSymbols ();
 };
+
+#endif

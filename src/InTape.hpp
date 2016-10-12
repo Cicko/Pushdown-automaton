@@ -12,6 +12,8 @@
 
 #include <string>
 #include <vector>
+#include "Utils.hpp"
+#include <algorithm>
 
 using namespace std;
 
@@ -31,7 +33,7 @@ public:
   string getActualChar () { return chars_[inx_]; };
   bool hasNext ();
   const void show (); // Show the content of the input tape.
-  const void showInline ();
+  const void showInline ();  // show content in the trace table.
 };
 
 

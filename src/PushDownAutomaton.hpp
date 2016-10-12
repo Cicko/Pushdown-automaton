@@ -6,16 +6,19 @@
 * @description: Input tape class that will contain the characters to determine if the string
 *               pertain to a specific language.
 ***/
+#ifndef _PUSH_DOWN_AUTOMATON_HPP_
+#define _PUSH_DOWN_AUTOMATON_HPP
 #include <iostream>
 #include <fstream>
-#include <sstream>
+#include <sstream>    // stringstream
 #include <exception>
-#include <iomanip>
+#include <iomanip>    // setw
+#include <algorithm>  // any_of
 #include <string>
-#include <utility> // pair class
+#include "Utils.hpp"  // lineToString, charToString
+#include <utility>    // pair class
 #include "Stack.hpp"
 #include "InTape.hpp"
-#include <string.h>
 
 using namespace std;
 
@@ -44,7 +47,7 @@ public:
 	void loadAutomaton (string fileName);
 	void nextStep (string actualState, InTape input, Stack stack, int readCount, bool trace);
 	bool checkInput (bool trace);
-	vector<transition_t> getAllowedTransitionsForState (string state, InTape input, Stack stack, bool verbose);
+	vector<transition_t> getAllowedTransitionsForState (string state, InTape input, Stack stack);
 	bool isFinalState (string state);
 	void show ();
 
@@ -56,6 +59,8 @@ private:
 	void readInitialStackSymbol (string symbol);
 	void readFinalStates (string states);
 	void saveTransition (string transition);
-	vector<string> lineToStrings (string line, string delimiter);
+	void showActualTraceInfo (string state, InTape input, Stack stack, vector<transition_t> allowed);
 	void showAllowedTransitions (vector<transition_t> transitions);
 };
+
+#endif

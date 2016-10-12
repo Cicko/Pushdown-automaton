@@ -4,12 +4,12 @@ S 0 1
 q0
 S
 q2
-q0 0 S q0 0 S
-q0 1 S q0 1 S
-q0 0 0 q0 0 0
-q0 0 1 q0 0 1
-q0 1 0 q0 1 0
-q0 1 1 q0 1 1
+q0 0 S q0 0S
+q0 1 S q0 1S
+q0 0 0 q0 00
+q0 0 1 q0 01
+q0 1 0 q0 10
+q0 1 1 q0 11
 q0 e S q1 S
 q0 e 0 q1 0
 q0 e 1 q1 1
