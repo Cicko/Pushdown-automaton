@@ -40,6 +40,7 @@ void InTape::loadFromKeyboard () {
   string input;
   cout << "Put string as input: ";
   cin >> input;
+  // Divide the whole string into substrings of size 1 and put them into the input tape.
   for_each (input.begin(), input.end(), [&] (char c) { chars_.push_back(utils::charToString(c)); });
 }
 

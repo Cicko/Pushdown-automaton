@@ -15,5 +15,5 @@ For more info
 This program is written in C++ and it was a practice for the subject *Complejidad computacional* (computational complexity) from the Universidad de La Laguna. The usage is very basic:
 
 ```bash
-> ./PushDownAutomaton <automaton_file>
+> ./PushDownAutomaton <automaton_file> [<input_file>]
 ```

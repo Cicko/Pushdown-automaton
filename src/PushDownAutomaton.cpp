@@ -1,6 +1,10 @@
 #include "PushDownAutomaton.hpp"
 
 
+
+
+
+
 PushDownAutomaton::PushDownAutomaton (string fileName) {
   inputTape_ = new InTape();
   loadAutomaton(fileName);
@@ -12,6 +16,7 @@ PushDownAutomaton::PushDownAutomaton (string automatonFile, string inputFile) {
   loadInput(inputFile);
 }
 
+// Initialization methods
 void PushDownAutomaton::loadInput (string fileName) {
   inputTape_->loadFromFile(fileName);
 }
@@ -49,6 +54,22 @@ void PushDownAutomaton::loadAutomaton (string fileName) {
   }
 }
 
+
+// Execution methods
+bool PushDownAutomaton::checkInput (bool trace) {
+  if (!inputTape_->isEmpty()) {
+    acceptedInput_ = false;
+    if (trace)
+      cout << "---- State ---- ---- Input ---- ---- Stack ---- ---- Actions ----" << endl;
+      nextStep (actualState_, *inputTape_, *stack_, 0, trace);
+      return acceptedInput_;
+  }
+  else {
+    cout << endl << "You have to load input first." << endl;
+    return false;
+  }
+}
+
 void PushDownAutomaton::nextStep (string actualState, InTape input, Stack stack, int readCount, bool trace) {
   if (!acceptedInput_) {
     try {
@@ -60,7 +81,8 @@ void PushDownAutomaton::nextStep (string actualState, InTape input, Stack stack,
 
         vector<transition_t> allowedTransitions = getAllowedTransitionsForState (actualState, input, stack);
 
-        showActualTraceInfo (actualState, input, stack, allowedTransitions);
+        if (trace)
+          showActualTraceInfo (actualState, input, stack, allowedTransitions);
 
         for (int i = 0; i < allowedTransitions.size(); i++) {
           Stack tempStack = stack;
@@ -105,6 +127,19 @@ void PushDownAutomaton::nextStep (string actualState, InTape input, Stack stack,
   }
 }
 
+
+vector<transition_t> PushDownAutomaton::getAllowedTransitionsForState (string actualState, InTape input, Stack stack) {
+  string actual = actualState + " " + input.read() + " " + stack.getTop();
+  string actualEmpty = actualState + " e " + stack.getTop(); // This transition is used to check e-transitions
+
+  vector<transition_t> allowed;
+  for (int i = 0;i < transitions_.size(); i++)
+    if (transitions_[i].first == actual || transitions_[i].first == actualEmpty)
+      allowed.push_back(transitions_[i]);
+
+  return allowed;
+}
+
 void PushDownAutomaton::showActualTraceInfo (string actualState, InTape input, Stack stack, vector<transition_t> allowedTransitions) {
   cout << setw(8) << actualState << setw(14);
   input.showInline();
@@ -128,24 +163,8 @@ void PushDownAutomaton::showAllowedTransitions (vector<transition_t> transitions
   cout << endl;
 }
 
-bool PushDownAutomaton::checkInput (bool trace) {
-  acceptedInput_ = false;
-  cout << "---- State ---- ---- Input ---- ---- Stack ---- ---- Actions ----" << endl;
-  nextStep (actualState_, *inputTape_, *stack_, 0, trace);
-  return acceptedInput_;
-}
 
-vector<transition_t> PushDownAutomaton::getAllowedTransitionsForState (string actualState, InTape input, Stack stack) {
-  string actual = actualState + " " + input.read() + " " + stack.getTop();
-  string actualEmpty = actualState + " e " + stack.getTop(); // This transition is used to check e-transitions
 
-  vector<transition_t> allowed;
-  for (int i = 0;i < transitions_.size(); i++)
-    if (transitions_[i].first == actual || transitions_[i].first == actualEmpty)
-      allowed.push_back(transitions_[i]);
-
-  return allowed;
-}
 
 
 bool PushDownAutomaton::isFinalState (string state) {

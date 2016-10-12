@@ -13,7 +13,7 @@ vector<string> utils::lineToStrings (string line, string delimiter) {
   return strings;
 }
 
-
+// Convert simple char to string
 string utils::charToString (char c) {
   stringstream ss;
   string s;

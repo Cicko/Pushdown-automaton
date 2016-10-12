@@ -29,11 +29,12 @@ public:
   void loadFromFile (string fileName);
   void loadFromKeyboard ();
   void reset ();
-  string read ();
-  string getActualChar () { return chars_[inx_]; };
+  string read ();                         // Read the actual element of the input tape so the head will move to the right (inx++)
+  string getActualChar () { return chars_[inx_]; };   // Get actual char at where the head is pointing without moving it
   bool hasNext ();
   const void show (); // Show the content of the input tape.
   const void showInline ();  // show content in the trace table.
+  bool isEmpty() { return chars_.size() == 0; };
 };
 
 
