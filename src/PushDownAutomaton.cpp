@@ -84,6 +84,7 @@ void PushDownAutomaton::nextStep (string actualState, InTape input, Stack stack,
         if (trace)
           showActualTraceInfo (actualState, input, stack, allowedTransitions);
 
+
         for (int i = 0; i < allowedTransitions.size(); i++) {
           Stack tempStack = stack;
           InTape tempInput = input;
@@ -164,16 +165,12 @@ void PushDownAutomaton::showAllowedTransitions (vector<transition_t> transitions
 }
 
 
-
-
-
 bool PushDownAutomaton::isFinalState (string state) {
   return any_of(finalStates_.begin(), finalStates_.end(), [&state](string finalState) { return state == finalState; });
 }
 
 
 // Private methods
-
 void PushDownAutomaton::readStates (string states) {
   states_ = utils::lineToStrings (states, " ");
 }

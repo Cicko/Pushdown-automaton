@@ -17,6 +17,7 @@ InTape::~InTape (){
 }
 
 void InTape::loadFromFile (string fileName) {
+  reset();
   inx_ = 0;
   fstream file;
   string symbol;
@@ -37,6 +38,7 @@ void InTape::loadFromFile (string fileName) {
 
 
 void InTape::loadFromKeyboard () {
+  reset();
   string input;
   cout << "Put string as input: ";
   cin >> input;
@@ -61,6 +63,7 @@ bool InTape::hasNext () {
 
 // return to the first position
 void InTape::reset () {
+  chars_.clear();
   inx_ = 0;
 }
 
